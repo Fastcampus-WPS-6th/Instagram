@@ -1,3 +1,6 @@
+"""
+post_list뷰를 'post/' URL에 할당
+"""
 from django.shortcuts import render
 
 from .models import Post
