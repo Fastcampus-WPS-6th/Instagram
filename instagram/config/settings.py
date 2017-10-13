@@ -19,6 +19,11 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 # instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 
+# instagram_project/instagram/media/
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# instagram_project/instagram/static/
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
 # 1. CONFIG_SECRET_DIR내의 'settings_common.json'파일을 읽고,
 #   그 결과를 config_secret_common_str변수에 할당
 f = open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json'))
