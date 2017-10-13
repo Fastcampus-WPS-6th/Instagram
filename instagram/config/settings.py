@@ -24,6 +24,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 # instagram_project/instagram/static/
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
 
 # 1. CONFIG_SECRET_DIR내의 'settings_common.json'파일을 읽고,
 #   그 결과를 config_secret_common_str변수에 할당
@@ -140,4 +141,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+
