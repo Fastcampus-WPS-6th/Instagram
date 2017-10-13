@@ -1,4 +1,12 @@
 <!--Template language의 for구문을 사용해서 각 Post의 photo항목을 출력-->
+<!--.photo속성의 'url'속성을 사용해서 img태그를 사용 실제 이미지를 보여주기-->
+
+<!--1. 사진 업로드하기-->
+<!--2. 사진에 댓글달기-->
+<!--extra1) urls.py모듈을 post애플리케이션 내부에 생성하고,
+						include를 이용해서 root urls.py모듈에서 사용-->
+<!--extra2) 사진 댓글 지우기, 사진 지우기-->
+
 <div>
 	{% for post in posts %}
 	<div>{{ post.photo }}</div>
