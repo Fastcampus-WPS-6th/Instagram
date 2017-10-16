@@ -8,9 +8,30 @@
 <!--extra2) 사진 댓글 지우기, 사진 지우기-->
 
 <div>
+	<a href="#last">Last로 갑시다</a>
 	{% for post in posts %}
-	<a href="{% url 'post_detail' post_pk=post.pk %}">
-		<img src="{{ post.photo.url }}">
-	</a>
+	<div id="post-{{ post.pk }}">
+		<a href="{% url 'post_detail' post_pk=post.pk %}">
+			<img src="{{ post.photo.url }}">
+		</a>
+		<!--
+		각 post마다 comment_form을 추가
+		각 post마다 자신의 댓글 목록을 출력
+		-->
+
+		<form action="{% url 'comment_create' post_pk=post.pk %}?next=/post/#post-comments-{{ post.pk }}" method="POST">
+			{% csrf_token %}
+			{{ comment_form }}
+			<button class="btn btn-primary btn-block">댓글달기</button>
+		</form>
+
+		<ul id="post-comments-{{ post.pk }}">
+			{% for comment in post.comments.all %}
+			<li>{{ comment.content }}</li>
+			{% endfor %}
+		</ul>
+	</div>
 	{% endfor %}
+
+	<div id="last">Last</div>
 </div>
