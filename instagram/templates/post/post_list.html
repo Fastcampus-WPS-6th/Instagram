@@ -9,6 +9,8 @@
 
 <div>
 	{% for post in posts %}
-	<img src="{{ post.photo.url }}">
+	<a href="{% url 'post_detail' post_pk=post.pk %}">
+		<img src="{{ post.photo.url }}">
+	</a>
 	{% endfor %}
 </div>

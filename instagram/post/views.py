@@ -42,13 +42,47 @@ def post_create(request):
         'GET'이면 템플릿파일을 보여주는 기존 로직을 그대로 실행
     """
     if request.method == 'POST':
+        # POST요청의 경우 PostForm인스턴스 생성과정에서 request.POST, request.FILES를 사용
         form = PostForm(request.POST, request.FILES)
+        # form생성과정에서 전달된 데이터들이 Form의 모든 field들에 유효한지 검사
         if form.is_valid():
+            # 유효할 경우 Post인스턴스를 생성 및 저장
             print(form.cleaned_data)
             post = Post.objects.create(
                 photo=form.cleaned_data['photo'])
             return HttpResponse(f'<img src="{post.photo.url}">')
-        else:
-            return HttpResponse('Form invalid!')
     else:
-        return render(request, 'post/post_create.html')
+        # GET요청의 경우, 빈 PostForm인스턴스를 생성해서 템플릿에 전달
+        form = PostForm()
+
+    # GET요청에선 이부분이 무조건 실행
+    # POST요청에선 form.is_valid()를 통과하지 못하면 이부분이 실행
+    context = {
+        'form': form,
+    }
+    return render(request, 'post/post_create.html', context)
+
+
+def post_detail(request, post_pk):
+    # 해당 post의 사진을 img태그로 출력
+    # 1. view작성
+    #   1-1. post_pk에 해당하는 Post객체를
+    #           post변수에 할당해서
+    #           post라는 키로 context에 할당해서 render에 전달
+    #   1-2. 템플릿은 post/post_detail.html사용
+
+    # 2. url작성
+    #   2-1. urls.py에 '/post/<post_pk>/에 해당하는 url에 이 view를 연결
+
+    # 3. 템플릿 작성
+    #   3-1. post/post_detail.html을 생성, 전달받은 'post'변수의
+    #       photo필드의 url속성을 이용해 img태그 출력
+
+    # 4. base템플릿 작성 및 'extend'템플릿태그 사용
+    #   html:5 emmet을 사용, 기본이 되는 base.html을 작성, 나머지 템플릿에서 해당 템플릿을 extend
+    #   내용은 'content' block에 채운다
+    post = Post.objects.get(pk=post_pk)
+    context = {
+        'post': post,
+    }
+    return render(request, 'post/post_detail.html', context)

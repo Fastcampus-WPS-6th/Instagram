@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+	{% if post.photo %}
+	<img src="{{ post.photo.url }}" alt="">
+	{% else %}
+	<h3>이미지 파일이 없습니다</h3>
+	{% endif %}
+</div>
+{% endblock %}
