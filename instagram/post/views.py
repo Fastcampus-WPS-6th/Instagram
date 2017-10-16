@@ -2,10 +2,10 @@
 post_list뷰를 'post/' URL에 할당
 """
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
-from .forms import PostForm
-from .models import Post
+from .forms import PostForm, CommentForm
+from .models import Post, PostComment
 
 
 def post_list(request):
@@ -87,3 +87,39 @@ def post_detail(request, post_pk):
         'post': post,
     }
     return render(request, 'post/post_detail.html', context)
+
+
+def comment_create(request, post_pk):
+    """
+    post_pk에 해당하는 Post에 연결된 PostComment를 작성
+    PostComment Form을 생성해서 사용
+    기본적인 루틴은 위의 post_create와 같음
+    :param request:
+    :param post_pk:
+    :return:
+    """
+    # URL get parameter로 온 'post_pk'에 해당하는
+    # Post instance를 'post'변수에 할당
+    # 찾지못하면 404Error를 브라우저에 리턴
+    post = get_object_or_404(Post, pk=post_pk)
+    if request.method == 'POST':
+        # 데이터가 바인딩된 CommentForm인스턴스를 form에 할당
+        form = CommentForm(request.POST)
+        # 유효성 검증
+        if form.is_valid():
+            # 통과한 경우, post에 해당하는 Comment인스턴스를 생성
+            PostComment.objects.create(
+                post=post,
+                content=form.cleaned_data['content']
+            )
+            # 생성 후 Post의 detail화면으로 이동
+            return redirect('post_detail', post_pk=post_pk)
+    else:
+        # GET요청이면 빈 Form(댓글 내용을 입력할 수 있는)을 생성
+        form = CommentForm()
+
+    # 폼이 포함된 입력 페이지를 보여주는 부분
+    context = {
+        'form': form,
+    }
+    return render(request, 'post/comment_create.html', context)
