@@ -1,6 +1,7 @@
 """
 post_list뷰를 'post/' URL에 할당
 """
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from .models import Post
@@ -39,8 +40,12 @@ def post_create(request):
         request.POST와 request.FILES를 print문으로 출력
         'GET'이면 템플릿파일을 보여주는 기존 로직을 그대로 실행
     """
-    if request.method == 'POST':
-        print(request.POST)
-        print(request.FILES)
-    elif request.method == 'GET':
+    photo = request.FILES.get('photo')
+    if request.method == 'POST' and photo:
+        # 1. 파일이 오지 않았을 경우, GET요청과 같은 결과를 리턴
+        #   1-1. 단, return render(...)하는 같은 함수를 두번 호출하지 말 것
+        photo = request.FILES['photo']
+        post = Post.objects.create(photo=photo)
+        return HttpResponse(f'<img src="{post.photo.url}">')
+    else:
         return render(request, 'post/post_create.html')
