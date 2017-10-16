@@ -83,8 +83,10 @@ def post_detail(request, post_pk):
     #   내용은 'content' block에 채운다
     # post = Post.objects.get(pk=post_pk)
     post = get_object_or_404(Post, pk=post_pk)
+    comment_form = CommentForm()
     context = {
         'post': post,
+        'comment_form': comment_form,
     }
     return render(request, 'post/post_detail.html', context)
 
@@ -114,12 +116,3 @@ def comment_create(request, post_pk):
             )
             # 생성 후 Post의 detail화면으로 이동
             return redirect('post_detail', post_pk=post_pk)
-    else:
-        # GET요청이면 빈 Form(댓글 내용을 입력할 수 있는)을 생성
-        form = CommentForm()
-
-    # 폼이 포함된 입력 페이지를 보여주는 부분
-    context = {
-        'form': form,
-    }
-    return render(request, 'post/comment_create.html', context)
