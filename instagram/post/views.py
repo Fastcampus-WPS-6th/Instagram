@@ -4,6 +4,7 @@ post_list뷰를 'post/' URL에 할당
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from .forms import PostForm
 from .models import Post
 
 
@@ -40,12 +41,14 @@ def post_create(request):
         request.POST와 request.FILES를 print문으로 출력
         'GET'이면 템플릿파일을 보여주는 기존 로직을 그대로 실행
     """
-    photo = request.FILES.get('photo')
-    if request.method == 'POST' and photo:
-        # 1. 파일이 오지 않았을 경우, GET요청과 같은 결과를 리턴
-        #   1-1. 단, return render(...)하는 같은 함수를 두번 호출하지 말 것
-        photo = request.FILES['photo']
-        post = Post.objects.create(photo=photo)
-        return HttpResponse(f'<img src="{post.photo.url}">')
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            print(form.cleaned_data)
+            post = Post.objects.create(
+                photo=form.cleaned_data['photo'])
+            return HttpResponse(f'<img src="{post.photo.url}">')
+        else:
+            return HttpResponse('Form invalid!')
     else:
         return render(request, 'post/post_create.html')
