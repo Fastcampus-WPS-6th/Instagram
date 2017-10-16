@@ -8,11 +8,20 @@
 	<h3>이미지 파일이 없습니다</h3>
 	{% endif %}
 
-	<!--
+	<form action="">
+		CommentForm을 사용해서 이부분 채우기
+		+ form에 필요한 다른 요소들 추가
+		<button class="btn-primary btn btn-block">작성</button>
+	</form>
 
+	<!--
 	post.photo_set.all()
 		-> post.photo_set.all
-
 	-->
+	<ul>
+	{% for comment in post.comments.all %}
+		<li>{{ comment.content }}</li>
+	{% endfor %}
+	</ul>
 </div>
 {% endblock %}

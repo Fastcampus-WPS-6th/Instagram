@@ -7,6 +7,6 @@ class Post(models.Model):
 
 
 class PostComment(models.Model):
-    post = models.ForeignKey(Post)
+    post = models.ForeignKey(Post, related_name='comments')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
