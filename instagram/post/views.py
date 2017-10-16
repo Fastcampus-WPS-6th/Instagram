@@ -2,7 +2,7 @@
 post_list뷰를 'post/' URL에 할당
 """
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from .forms import PostForm
 from .models import Post
@@ -81,7 +81,8 @@ def post_detail(request, post_pk):
     # 4. base템플릿 작성 및 'extend'템플릿태그 사용
     #   html:5 emmet을 사용, 기본이 되는 base.html을 작성, 나머지 템플릿에서 해당 템플릿을 extend
     #   내용은 'content' block에 채운다
-    post = Post.objects.get(pk=post_pk)
+    # post = Post.objects.get(pk=post_pk)
+    post = get_object_or_404(Post, pk=post_pk)
     context = {
         'post': post,
     }
