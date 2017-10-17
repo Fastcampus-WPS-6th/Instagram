@@ -29,9 +29,8 @@ class LoginForm(forms.Form):
         self.user = None
 
     def clean(self):
-        cleaned_data = super().clean()
-        username = cleaned_data.get('username')
-        password = cleaned_data.get('password')
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
 
         # 해당하는 User가 있는지 인증
         # 인증에 성공하면 self.user변수에 User객체가 할당, 실패시 None
@@ -49,7 +48,7 @@ class LoginForm(forms.Form):
     def _login(self, request):
         """
         django.contrib.auth.login(request)를 실행
-        
+
         :param request: django.contrib.auth.login()에 주어질 HttpRequest객체
         :return: None
         """
@@ -68,7 +67,13 @@ class SignupForm(forms.Form):
         )
     )
     password = forms.CharField(
-        # required=False,
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control'
+            }
+        )
+    )
+    password2 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control'
@@ -84,3 +89,33 @@ class SignupForm(forms.Form):
         if User.objects.filter(username=data).exists():
             raise forms.ValidationError('오아ㅏ아아아아아')
         return data
+
+    def clean_password2(self):
+        """
+        password, password2의 값이 같은지 비교
+        다르면 raise forms.ValidationError
+        :return:
+        """
+        # 이건 됨
+        password = self.cleaned_data['password']
+        password2 = self.cleaned_data['password2']
+        if password != password2:
+            raise forms.ValidationError('Password1 and Password2 not equal')
+        return password2
+
+    def clean(self):
+        if self.is_valid():
+            setattr(self, 'signup', self._signup)
+        return self.cleaned_data
+
+    def _signup(self):
+        """
+        User를 생성
+        :return:
+        """
+        username = self.cleaned_data['username']
+        password = self.cleaned_data['password']
+        return User.objects.create_user(
+            username=username,
+            password=password
+        )
