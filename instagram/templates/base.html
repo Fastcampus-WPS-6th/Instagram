@@ -12,7 +12,15 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Instagram</h1>
+		<a href="{% url 'post_list' %}"><h1>Instagram</h1></a>
+		<p>
+			<div>{{ user }}</div>
+			{% if user.is_authenticated %}
+				{{ user.username }} 님, 환영합니다!  [로그아웃하기]
+			{% else %}
+				로그인해주세요
+			{% endif %}
+		</p>
 		<hr>
 		{% block content %}
 		{% endblock %}

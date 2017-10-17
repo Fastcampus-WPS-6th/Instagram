@@ -43,6 +43,9 @@ urlpatterns = [
     url(r'^member/signup/$',
         member_views.signup,
         name='signup'),
+    url(r'^member/login/$',
+        member_views.login,
+        name='login'),
 ]
 urlpatterns += static(
     settings.MEDIA_URL,
