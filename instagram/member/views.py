@@ -10,9 +10,11 @@ def signup(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        # 조건에 objects의 query를 이용해서 중복을 막기
-        # 이미 해당 User가 존재하는지 검사
         if username and password:
+            # 이미 username항목이 주어진 username값으로 존재하는 User가 있는지 검사
+            if User.objects.filter(username=username).exists():
+                return HttpResponse(f'Username {username} is already exist')
+            # username, password가 주어졌고 중복되는 User가 없다면 User생성
             user = User.objects.create_user(
                 username=username,
                 password=password
