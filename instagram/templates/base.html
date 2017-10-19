@@ -17,13 +17,13 @@
 				col-sm-10 col-sm-offset-1
 				col-xs-12">
 
-					<a href="{% url 'post_list' %}"><h1>Instagram</h1></a>
+					<a href="{% url 'post:post_list' %}"><h1>Instagram</h1></a>
 					<p class="text-right">
 						{% if user.is_authenticated %}
-						{{ user.username }}님, 환영합니다! <a href="{% url 'logout' %}" class="btn btn-xs btn-primary">로그아웃</a>
+						{{ user.username }}님, 환영합니다! <a href="{% url 'member:logout' %}" class="btn btn-xs btn-primary">로그아웃</a>
 						{% else %}
 						<!-- 로그인 안 되어 있을 경우 로그인 화면으로 갈 수 있는 링크 생성 -->
-						<a href="{% url 'login' %}" class="btn btn-xs btn-primary">로그인</a>
+						<a href="{% url 'member:login' %}" class="btn btn-xs btn-primary">로그인</a>
 						{% endif %}
 					</p>
 					<hr>

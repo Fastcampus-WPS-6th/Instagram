@@ -14,7 +14,7 @@
 	<div id="post-{{ post.pk }}" class="panel panel-default post">
 		<div class="panel-heading">Head</div>
 		<div class="panel-body">
-			<a href="{% url 'post_detail' post_pk=post.pk %}">
+			<a href="{% url 'post:post_detail' post_pk=post.pk %}">
 				<img src="{{ post.photo.url }}" class="img-post">
 			</a>
 			<div class="body-content">
@@ -24,7 +24,7 @@
 					{% endfor %}
 				</ul>
 				<form
-					action="{% url 'comment_create' post_pk=post.pk %}?next=/post/#post-comments-{{ post.pk }}"
+					action="{% url 'post:comment_create' post_pk=post.pk %}?next=/post/#post-comments-{{ post.pk }}"
 					method="POST">
 					{% csrf_token %}
 					{{ comment_form }}
