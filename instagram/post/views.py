@@ -89,13 +89,16 @@ def post_create(request):
 
 def comment_create(request, post_pk):
     """
-    post_pk에 해당하는 Post에 연결된 PostComment를 작성
-    PostComment Form을 생성해서 사용
-    기본적인 루틴은 위의 post_create와 같음
+    로그인한 유저만 요청 가능하도록 함
+    작성하는 Comment에 author정보 추가
+    
     :param request:
     :param post_pk:
     :return:
     """
+    if not request.user.is_authenticated:
+        return redirect('member:login')
+
     # URL get parameter로 온 'post_pk'에 해당하는
     # Post instance를 'post'변수에 할당
     # 찾지못하면 404Error를 브라우저에 리턴
@@ -108,6 +111,7 @@ def comment_create(request, post_pk):
             # 통과한 경우, post에 해당하는 Comment인스턴스를 생성
             PostComment.objects.create(
                 post=post,
+                author=request.user,
                 content=form.cleaned_data['content']
             )
             # 생성 후 Post의 detail화면으로 이동
