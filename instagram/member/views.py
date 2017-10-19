@@ -1,4 +1,7 @@
-from django.contrib.auth import get_user_model, authenticate, login as django_login
+from django.contrib.auth import (
+    get_user_model,
+    logout as django_logout,
+)
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -21,6 +24,11 @@ def login(request):
         'login_form': form,
     }
     return render(request, 'member/login.html', context)
+
+
+def logout(request):
+    django_logout(request)
+    return redirect('post_list')
 
 
 def signup(request):
