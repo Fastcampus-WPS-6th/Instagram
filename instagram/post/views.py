@@ -49,10 +49,9 @@ def post_create(request):
         # form생성과정에서 전달된 데이터들이 Form의 모든 field들에 유효한지 검사
         if form.is_valid():
             # 유효할 경우 Post인스턴스를 생성 및 저장
-            print(form.cleaned_data)
-            post = Post.objects.create(
+            Post.objects.create(
                 photo=form.cleaned_data['photo'])
-            return HttpResponse(f'<img src="{post.photo.url}">')
+            return redirect('post:post_list')
     else:
         # GET요청의 경우, 빈 PostForm인스턴스를 생성해서 템플릿에 전달
         form = PostForm()

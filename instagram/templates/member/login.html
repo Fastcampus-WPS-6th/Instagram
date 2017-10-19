@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block title %}Login{% endblock %}
 {% block content %}
 <div class="login-container">
 	{% include 'include/form-horizontal.html' with form=login_form submit_text='로그인' %}
