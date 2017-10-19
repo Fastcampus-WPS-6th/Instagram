@@ -1,7 +1,6 @@
 """
 post_list뷰를 'post/' URL에 할당
 """
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import PostForm, CommentForm
@@ -22,6 +21,34 @@ def post_list(request):
         'comment_form': comment_form,
     }
     return render(request, 'post/post_list.html', context)
+
+
+def post_detail(request, post_pk):
+    # 해당 post의 사진을 img태그로 출력
+    # 1. view작성
+    #   1-1. post_pk에 해당하는 Post객체를
+    #           post변수에 할당해서
+    #           post라는 키로 context에 할당해서 render에 전달
+    #   1-2. 템플릿은 post/post_detail.html사용
+
+    # 2. url작성
+    #   2-1. urls.py에 '/post/<post_pk>/에 해당하는 url에 이 view를 연결
+
+    # 3. 템플릿 작성
+    #   3-1. post/post_detail.html을 생성, 전달받은 'post'변수의
+    #       photo필드의 url속성을 이용해 img태그 출력
+
+    # 4. base템플릿 작성 및 'extend'템플릿태그 사용
+    #   html:5 emmet을 사용, 기본이 되는 base.html을 작성, 나머지 템플릿에서 해당 템플릿을 extend
+    #   내용은 'content' block에 채운다
+    # post = Post.objects.get(pk=post_pk)
+    post = get_object_or_404(Post, pk=post_pk)
+    comment_form = CommentForm()
+    context = {
+        'post': post,
+        'comment_form': comment_form,
+    }
+    return render(request, 'post/post_detail.html', context)
 
 
 def post_create(request):
@@ -62,34 +89,6 @@ def post_create(request):
         'form': form,
     }
     return render(request, 'post/post_create.html', context)
-
-
-def post_detail(request, post_pk):
-    # 해당 post의 사진을 img태그로 출력
-    # 1. view작성
-    #   1-1. post_pk에 해당하는 Post객체를
-    #           post변수에 할당해서
-    #           post라는 키로 context에 할당해서 render에 전달
-    #   1-2. 템플릿은 post/post_detail.html사용
-
-    # 2. url작성
-    #   2-1. urls.py에 '/post/<post_pk>/에 해당하는 url에 이 view를 연결
-
-    # 3. 템플릿 작성
-    #   3-1. post/post_detail.html을 생성, 전달받은 'post'변수의
-    #       photo필드의 url속성을 이용해 img태그 출력
-
-    # 4. base템플릿 작성 및 'extend'템플릿태그 사용
-    #   html:5 emmet을 사용, 기본이 되는 base.html을 작성, 나머지 템플릿에서 해당 템플릿을 extend
-    #   내용은 'content' block에 채운다
-    # post = Post.objects.get(pk=post_pk)
-    post = get_object_or_404(Post, pk=post_pk)
-    comment_form = CommentForm()
-    context = {
-        'post': post,
-        'comment_form': comment_form,
-    }
-    return render(request, 'post/post_detail.html', context)
 
 
 def comment_create(request, post_pk):
