@@ -72,6 +72,11 @@ def post_create(request):
         # form생성과정에서 전달된 데이터들이 Form의 모든 field들에 유효한지 검사
         if form.is_valid():
             # 유효할 경우 Post인스턴스를 생성 및 저장
+
+            # 1. 커스텀 메서드 사용
+            # form.save(author=request.user)
+
+            # 2. 기존 Django의 ModelForm방식 사용
             post = form.save(commit=False)
             post.author = request.user
             post.save()
