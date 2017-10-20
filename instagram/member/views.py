@@ -35,10 +35,10 @@ def logout(request):
 def signup(request):
     if request.method == 'POST':
         # 데이터가 binding된 SignupForm인스턴스를 생성
-        form = SignupForm(request.POST)
+        form = SignupForm(request.POST, request.FILES)
         # 해당 form이 자신의 필드에 유효한 데이터를 가지고 있는지 유효성 검사
         if form.is_valid():
-            user = form.signup()
+            user = form.save()
             # 회원가입이 완료된 후 해당 유저를 login시킴
             django_login(request, user)
             return redirect('post:post_list')

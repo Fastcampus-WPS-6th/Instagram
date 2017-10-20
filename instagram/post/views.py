@@ -127,11 +127,11 @@ def comment_create(request, post_pk):
         # 유효성 검증
         if form.is_valid():
             # 통과한 경우, post에 해당하는 Comment인스턴스를 생성
-            PostComment.objects.create(
-                post=post,
-                author=request.user,
-                content=form.cleaned_data['content']
-            )
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+
             # GET parameter로 'next'값이 전달되면 
             # 공백을 없애고 다음에 redirect될 주소로 지정
             next = request.GET.get('next', '').strip()
