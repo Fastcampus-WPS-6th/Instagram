@@ -136,3 +136,17 @@ def comment_create(request, post_pk):
                 return redirect(next)
             # 지정되지 않으면 post_detail로 이동
             return redirect('post:post_detail', post_pk=post_pk)
+
+
+def comment_delete(request, comment_pk):
+    next_path = request.GET.get('next', '').strip()
+
+    if request.method == 'POST':
+        comment = get_object_or_404(PostComment, pk=comment_pk)
+        if comment.author == request.user:
+            comment.delete()
+            if next_path:
+                return redirect(next_path)
+            return redirect('post:post_detail', post_pk=comment.post.pk)
+        else:
+            raise PermissionDenied('작성자가 아닙니다')

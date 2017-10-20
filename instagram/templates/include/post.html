@@ -1,10 +1,13 @@
 <div id="post-{{ post.pk }}" class="panel panel-default post">
 	<div class="panel-heading">
 		<span>{{ post.author.username }}</span>
+
+		{% if post.author == user %}
 		<form action="{% url 'post:post_delete' post_pk=post.pk %}" method="post">
 			{% csrf_token %}
 			<button class="btn btn-danger btn-xs">삭제</button>
 		</form>
+		{% endif %}
 	</div>
 	<div class="panel-body">
 		<a href="{% url 'post:post_detail' post_pk=post.pk %}">
@@ -13,13 +16,27 @@
 		<div class="body-content">
 			<ul id="post-comments-{{ post.pk }}">
 				{% for comment in post.comments.all %}
-				<li>{{ comment.content }}</li>
+				<li>
+					<span>{{ comment.content }}</span>
+					{% if comment.author == user %}
+					<form action="{% url 'post:comment_delete' comment_pk=comment.pk %}?next=
+						{% if post_type == 'list' %}
+							{% url 'post:post_list' %}#post-{{ post.pk }}
+						{% elif post_type == 'detail' %}
+							{% url 'post:post_detail' post_pk=post.pk %}
+						{% endif %}"
+						method="post" class="form-inline">
+						{% csrf_token %}
+						<button class="btn btn-danger btn-xs">삭제</button>
+					</form>
+					{% endif %}
+				</li>
 				{% endfor %}
 			</ul>
 			<form
 				action="{% url 'post:comment_create' post_pk=post.pk %}?next=
 				{% if post_type == 'list' %}
-					/post/#post-{{ post.pk }}
+					{% url 'post:post_list' %}#post-{{ post.pk }}
 				{% elif post_type == 'detail' %}
 					{% url 'post:post_detail' post_pk=post.pk %}
 				{% endif %}"
