@@ -114,8 +114,12 @@ def comment_create(request, post_pk):
                 author=request.user,
                 content=form.cleaned_data['content']
             )
-            # 생성 후 Post의 detail화면으로 이동
-            next = request.GET.get('next')
+            # GET parameter로 'next'값이 전달되면 
+            # 공백을 없애고 다음에 redirect될 주소로 지정
+            next = request.GET.get('next', '').strip()
+            # 다음에 갈 URL (next)가 빈 문자열이 아닌 경우
             if next:
+                # 해당 next url로 이동
                 return redirect(next)
+            # 지정되지 않으면 post_detail로 이동
             return redirect('post:post_detail', post_pk=post_pk)

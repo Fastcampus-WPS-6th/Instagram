@@ -8,28 +8,7 @@
 {% block content %}
 <div>
 	{% for post in posts %}
-	<div id="post-{{ post.pk }}" class="panel panel-default post">
-		<div class="panel-heading">Head</div>
-		<div class="panel-body">
-			<a href="{% url 'post:post_detail' post_pk=post.pk %}">
-				<img src="{{ post.photo.url }}" class="img-post">
-			</a>
-			<div class="body-content">
-				<ul id="post-comments-{{ post.pk }}">
-					{% for comment in post.comments.all %}
-					<li>{{ comment.content }}</li>
-					{% endfor %}
-				</ul>
-				<form
-					action="{% url 'post:comment_create' post_pk=post.pk %}?next=/post/#post-comments-{{ post.pk }}"
-					method="POST">
-					{% csrf_token %}
-					{{ comment_form }}
-					<button class="btn btn-primary btn-block">댓글달기</button>
-				</form>
-			</div>
-		</div>
-	</div>
+		{% include 'include/post.html' with post_type='list' %}
 	{% endfor %}
 </div>
 {% endblock %}

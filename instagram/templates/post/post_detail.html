@@ -2,26 +2,6 @@
 
 {% block content %}
 <div class="post-detail">
-	{% if post.photo %}
-	<img src="{{ post.photo.url }}" alt="" class="img-post">
-	{% else %}
-	<h3>이미지 파일이 없습니다</h3>
-	{% endif %}
-
-	<form action="{% url 'comment_create' post_pk=post.pk %}" method="POST">
-		{% csrf_token %}
-		{{ comment_form }}
-		<button class="btn-primary btn btn-block">작성</button>
-	</form>
-
-	<!--
-	post.photo_set.all()
-		-> post.photo_set.all
-	-->
-	<ul>
-	{% for comment in post.comments.all %}
-		<li>{{ comment.content }}</li>
-	{% endfor %}
-	</ul>
+	{% include 'include/post.html' with post_type='detail' %}
 </div>
 {% endblock %}

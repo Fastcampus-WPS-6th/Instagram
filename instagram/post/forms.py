@@ -14,20 +14,6 @@ class PostForm(forms.Form):
             }
         )
     )
-    text = forms.CharField(
-        max_length=5,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-            }
-        )
-    )
-
-    def clean_text(self):
-        data = self.cleaned_data['text']
-        if data != data.upper():
-            raise forms.ValidationError('All text must uppercase!')
-        return data
 
 
 class CommentForm(forms.Form):
