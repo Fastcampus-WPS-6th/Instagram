@@ -1,5 +1,6 @@
 from django.contrib.auth import (
     get_user_model,
+    login as django_login,
     logout as django_logout,
 )
 from django.http import HttpResponse
@@ -38,7 +39,9 @@ def signup(request):
         # 해당 form이 자신의 필드에 유효한 데이터를 가지고 있는지 유효성 검사
         if form.is_valid():
             user = form.signup()
-            return HttpResponse(f'{user.username}, {user.password}')
+            # 회원가입이 완료된 후 해당 유저를 login시킴
+            django_login(request, user)
+            return redirect('post:post_list')
 
     # GET요청시 SignupForm인스턴스를 form변수에 할당, context에 같은 키/값으로 전달
     else:

@@ -18,9 +18,13 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
+from . import views
+
 urlpatterns = [
     # Django admin
     url(r'^admin/', admin.site.urls),
+
+    url(r'^$', views.index, name='index'),
     url(r'^post/', include('post.urls', namespace='post')),
     url(r'^member/', include('member.urls', namespace='member')),
 ]
