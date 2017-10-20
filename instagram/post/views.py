@@ -1,6 +1,7 @@
 """
 post_list뷰를 'post/' URL에 할당
 """
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import PostForm, CommentForm
@@ -85,6 +86,18 @@ def post_create(request):
         'form': form,
     }
     return render(request, 'post/post_create.html', context)
+
+
+def post_delete(request, post_pk):
+    if request.method == 'POST':
+        # post_pk에 해당하는 Post가 있는지 검사
+        post = get_object_or_404(Post, pk=post_pk)
+        # request.user가 Post의 author인지 검사
+        if post.author == request.user:
+            post.delete()
+            return redirect('post:post_list')
+        else:
+            raise PermissionDenied
 
 
 def comment_create(request, post_pk):

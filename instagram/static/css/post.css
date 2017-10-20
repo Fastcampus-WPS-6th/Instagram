@@ -10,6 +10,9 @@ ul, ol {
 img.img-post {
     width: 100%;
 }
+.post .panel-heading form {
+    display: inline-block;
+}
 .post .panel-body {
     padding: 0;
     margin: 0;

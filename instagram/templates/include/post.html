@@ -1,6 +1,10 @@
 <div id="post-{{ post.pk }}" class="panel panel-default post">
 	<div class="panel-heading">
 		<span>{{ post.author.username }}</span>
+		<form action="{% url 'post:post_delete' post_pk=post.pk %}" method="post">
+			{% csrf_token %}
+			<button class="btn btn-danger btn-xs">삭제</button>
+		</form>
 	</div>
 	<div class="panel-body">
 		<a href="{% url 'post:post_detail' post_pk=post.pk %}">
