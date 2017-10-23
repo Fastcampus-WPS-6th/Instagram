@@ -3,6 +3,7 @@ from django.contrib.auth import (
     login as django_login,
     logout as django_logout,
 )
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -12,11 +13,16 @@ User = get_user_model()
 
 
 def login(request):
+    # GET파라미터의 'next'값을 사용하도록 수정
+    next_path = request.GET.get('next')
+
     # POST요청 (Form submit)의 경우
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             form.login(request)
+            if next_path:
+                return redirect(next_path)
             return redirect('post:post_list')
     else:
         # GET요청에서는 Form을 보여줌
@@ -50,3 +56,8 @@ def signup(request):
         'signup_form': form,
     }
     return render(request, 'member/signup.html', context)
+
+
+@login_required
+def profile(request):
+    return HttpResponse(f'User profile page {request.user}')
