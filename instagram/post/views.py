@@ -115,6 +115,12 @@ def post_like_toggle(request, post_pk):
         현재 로그인한 유저의 like_posts에 있다면 없애고
         like_posts에 없다면 추가
 
+    3. post.html에서 현재 user가 해당 post를 like했는지 여부 표시
+        {% if <A> in <B> %}
+
+    4. post.html에서 이 뷰로 요청을 보낼 수 있는 form구현
+
+
     :param request:
     :param post_pk:
     :return:
@@ -132,7 +138,7 @@ def post_like_toggle(request, post_pk):
     filtered_like_posts = user.like_posts.filter(pk=post.pk)
     # 존재할경우, like_posts목록에서 해당 Post를 삭제
     if filtered_like_posts.exists():
-        user.like_posts.remove(filtered_like_posts)
+        user.like_posts.remove(post)
     # 없을 경우, like_posts목록에 해당 Post를 추가
     else:
         user.like_posts.add(post)

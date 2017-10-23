@@ -23,3 +23,6 @@ img.img-post {
 .post .panel-body .body-content {
     padding: 10px;
 }
+.border-none {
+    border: none;
+}

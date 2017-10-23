@@ -14,6 +14,26 @@
 			<img src="{{ post.photo.url }}" class="img-post">
 		</a>
 		<div class="body-content">
+			<div class="btn-container">
+				<form action="{% url 'post:post_like_toggle' post_pk=post.pk %}?next=
+						{% if post_type == 'list' %}
+							{% url 'post:post_list' %}#post-{{ post.pk }}
+						{% elif post_type == 'detail' %}
+							{% url 'post:post_detail' post_pk=post.pk %}
+						{% endif %}" method="POST">
+					{% csrf_token %}
+					<button class="btn btn-default border-none" aria-label="Like button">
+					  <span
+						  class="glyphicon
+						    {% if post in user.like_posts.all %}
+						      glyphicon-heart
+								{% else %}
+									glyphicon-heart-empty
+								{% endif %}"
+						  aria-hidden="true"></span>
+					</button>
+				</form>
+			</div>
 			<ul id="post-comments-{{ post.pk }}">
 				{% for comment in post.comments.all %}
 				<li>
