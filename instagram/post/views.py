@@ -105,6 +105,44 @@ def post_delete(request, post_pk):
             raise PermissionDenied('작성자가 아닙니다')
 
 
+def post_like_toggle(request, post_pk):
+    """
+    1. view, url연결
+        /post/<post_pk>/like-toggle/
+
+    2. 로직구현
+        post_pk에 해당하는 Post가
+        현재 로그인한 유저의 like_posts에 있다면 없애고
+        like_posts에 없다면 추가
+
+    :param request:
+    :param post_pk:
+    :return:
+    """
+    # GET파라미터로 전달된 이동할 URL
+    next_path = request.GET.get('next')
+
+    # post_pk에 해당하는 Post객체
+    post = get_object_or_404(Post, pk=post_pk)
+
+    # 요청한 사용자
+    user = request.user
+
+    # 사용자의 like_posts목록에서 like_toggle할 Post가 있는지 확인
+    filtered_like_posts = user.like_posts.filter(pk=post.pk)
+    # 존재할경우, like_posts목록에서 해당 Post를 삭제
+    if filtered_like_posts.exists():
+        user.like_posts.remove(filtered_like_posts)
+    # 없을 경우, like_posts목록에 해당 Post를 추가
+    else:
+        user.like_posts.add(post)
+
+    # 이동할 path가 존재할 경우 해당 위치로, 없을 경우 Post상세페이지로 이동
+    if next_path:
+        return redirect(next_path)
+    return redirect('post:post_detail', post_pk=post_pk)
+
+
 def comment_create(request, post_pk):
     """
     로그인한 유저만 요청 가능하도록 함
