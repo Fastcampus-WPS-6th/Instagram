@@ -91,7 +91,7 @@ def facebook_login(request):
     app_access_token = f'{app_id}|{app_secret_code}'
     code = request.GET.get('code')
 
-    def get_access_token_info(code):
+    def get_access_token_info(code_value):
         # 사용자가 페이스북에 로그인하기 위한 링크에 있던 'redirect_uri' GET파라미터의 값과 동일한 값
         redirect_uri = '{scheme}://{host}{relative_url}'.format(
             scheme=request.scheme,
@@ -106,7 +106,7 @@ def facebook_login(request):
             'client_id': app_id,
             'redirect_uri': redirect_uri,
             'client_secret': app_secret_code,
-            'code': code,
+            'code': code_value,
         }
         # 요청 후 결과를 받아옴
         response = requests.get(url_access_token, params_access_token)
@@ -117,16 +117,20 @@ def facebook_login(request):
         #    'token_type'=response.json()['token_type.....
         return AccessTokenInfo(**response.json())
 
-    # 전달받은 code값으로 AccessTokenInfo namedtuple을 반환
-    token_info = get_access_token_info(code)
-    # namedtuple에서 'access_token'속성의 값을 가져옴
-    access_token = token_info.access_token
+    def get_debug_token_info(token):
+        url_debug_token = 'https://graph.facebook.com/debug_token'
+        params_debug_token = {
+            'input_token': token,
+            'access_token': app_access_token,
+        }
+        response = requests.get(url_debug_token, params_debug_token)
+        return DebugTokenInfo(**response.json()['data'])
 
-    url_debug_token = 'https://graph.facebook.com/debug_token'
-    params_debug_token = {
-        'input_token': access_token,
-        'access_token': app_access_token,
-    }
-    response = requests.get(url_debug_token, params_debug_token)
-    debug_token_info = DebugTokenInfo(**response.json()['data'])
-    print(debug_token_info)
+    # 전달받은 code값으로 AccessTokenInfo namedtuple을 반환
+    access_token_info = get_access_token_info(code)
+    # namedtuple에서 'access_token'속성의 값을 가져옴
+    access_token = access_token_info.access_token
+    # DebugTokenInfo 가져오기
+    debug_token_info = get_debug_token_info(access_token)
+    return HttpResponse(debug_token_info)
+
