@@ -1,4 +1,3 @@
-from pprint import pprint
 from typing import NamedTuple
 
 import requests
@@ -87,6 +86,12 @@ def facebook_login(request):
         type: str
         user_id: str
 
+    class UserInfo:
+        def __init__(self, data):
+            self.id = data['id']
+            self.email = data.get('email', '')
+            self.url_picture = data['picture']['data']['url']
+
     app_id = settings.FACEBOOK_APP_ID
     app_secret_code = settings.FACEBOOK_APP_SECRET_CODE
     app_access_token = f'{app_id}|{app_secret_code}'
@@ -148,5 +153,22 @@ def facebook_login(request):
     }
     response = requests.get(url_graph_user_info, params_graph_user_info)
     result = response.json()
-    return HttpResponse(result.items())
+    user_info = UserInfo(data=result)
 
+    # 페이스북으로 가입한 유저의 username
+    #   fb_<facebook_user_id>
+    username = f'fb_{user_info.id}'
+    # 위 username에 해당하는 User가 있는지 검사
+    if User.objects.filter(username=username).exists():
+        # 있으면 user에 해당 유저를 할당
+        user = User.objects.get(username=username)
+    else:
+        # 없으면 user에 새로 만든 User를 할당
+        user = User.objects.create_user(
+            user_type=User.USER_TYPE_FACEBOOK,
+            username=username,
+            age=0
+        )
+    # user를 로그인시키고 post_list페이지로 이동
+    django_login(request, user)
+    return redirect('post:post_list')
