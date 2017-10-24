@@ -46,14 +46,9 @@ config_secret_common = json.loads(config_secret_common_str)
 #   해당하는 value를 SECRET_KEY변수에 할당
 SECRET_KEY = config_secret_common['django']['secret_key']
 
-# 4. .gitignore에 .config_secret/ 폴더를 추가
-
-
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
+# Facebook
+FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
+FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

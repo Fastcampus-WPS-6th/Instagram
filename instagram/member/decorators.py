@@ -6,6 +6,7 @@ member:login뷰로 이동
 request.META['HTTP_REFERER']
     현재 요청 이전에 어디에 있었는지
 """
+from functools import wraps
 from urllib.parse import urlparse
 
 from django.shortcuts import redirect
@@ -13,6 +14,7 @@ from django.urls import reverse
 
 
 def login_required(view_func):
+    @wraps(view_func)
     def wrapped_view_func(*args, **kwargs):
         request = args[0]
         if not request.user.is_authenticated:
@@ -22,4 +24,5 @@ def login_required(view_func):
                 referer=referer)
             return redirect(url)
         return view_func(*args, **kwargs)
+
     return wrapped_view_func

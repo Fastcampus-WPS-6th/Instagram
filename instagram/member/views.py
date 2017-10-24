@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import (
     get_user_model,
     login as django_login,
@@ -29,6 +30,7 @@ def login(request):
         form = LoginForm()
     context = {
         'login_form': form,
+        'facebook_app_id': settings.FACEBOOK_APP_ID,
     }
     return render(request, 'member/login.html', context)
 
@@ -61,3 +63,9 @@ def signup(request):
 @login_required
 def profile(request):
     return HttpResponse(f'User profile page {request.user}')
+
+
+def facebook_login(request):
+    print(request.GET)
+    print(request.POST)
+    return HttpResponse(f'GET: {request.GET}<br>POST: {request.POST}')
