@@ -36,6 +36,7 @@ def login(request):
     context = {
         'login_form': form,
         'facebook_app_id': settings.FACEBOOK_APP_ID,
+        'scope': settings.FACEBOOK_SCOPE,
     }
     return render(request, 'member/login.html', context)
 
@@ -132,5 +133,20 @@ def facebook_login(request):
     access_token = access_token_info.access_token
     # DebugTokenInfo 가져오기
     debug_token_info = get_debug_token_info(access_token)
-    return HttpResponse(debug_token_info)
+
+    # 유저정보 가져오기
+    user_info_fields = [
+        'id',
+        'name',
+        'picture',
+        'email',
+    ]
+    url_graph_user_info = 'https://graph.facebook.com/me'
+    params_graph_user_info = {
+        'fields': ','.join(user_info_fields),
+        'access_token': access_token,
+    }
+    response = requests.get(url_graph_user_info, params_graph_user_info)
+    result = response.json()
+    return HttpResponse(result.items())
 
