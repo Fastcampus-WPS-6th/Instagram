@@ -1,6 +1,8 @@
 import io
+import os
 from random import randint
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.urls import reverse, resolve
@@ -94,3 +96,28 @@ class PostListViewTest(APILiveServerTestCase):
         response = self.client.get(self.URL_API_POST_LIST)
         # author가 없는 Post개수는 response에 포함되지 않는지 확인
         self.assertEqual(len(response.data), num_posts)
+
+    def test_create_post(self):
+        """
+        Post Create가 되는지 확인
+        :return:
+        """
+        # 테스트용 유저 생성
+        user = self.create_user()
+        # 해당 유저를 현재 client에 강제로 인증
+        self.client.force_authenticate(user=user)
+        # 테스트용 이미지 파일의 경로
+        path = os.path.join(settings.STATIC_DIR, 'test', 'pby63.jpg')
+        print(path)
+
+        # path에 해당하는 파일을 post요청에 'photo'키의 값으로 전달
+        with open(path, 'rb') as photo:
+            response = self.client.post(self.URL_API_POST_LIST, {
+                'photo': photo,
+            })
+
+        # response 코드가 201인지 확인
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # 1개의 포스트가 생성되었는지 확인
+        self.assertEqual(Post.objects.count(), 1)
