@@ -2,6 +2,7 @@
 # 근데 APIView를 상속받도록
 # Serializer도 생성 (serializers.py)
 # get요청만 응답
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,3 +16,15 @@ class PostList(APIView):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# PostDetail APIView생성
+# APIView를 사용
