@@ -1,10 +1,13 @@
+import filecmp
 import io
 import os
 from random import randint
 
+import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
 from django.urls import reverse, resolve
 from rest_framework import status
 from rest_framework.test import APILiveServerTestCase
@@ -99,7 +102,7 @@ class PostListViewTest(APILiveServerTestCase):
 
     def test_create_post(self):
         """
-        Post Create가 되는지 확인
+        Post를 생성하고 생성하기 위해 사용한 파일과 생성되어진 파일이 같은지 검사
         :return:
         """
         # 테스트용 유저 생성
@@ -108,7 +111,6 @@ class PostListViewTest(APILiveServerTestCase):
         self.client.force_authenticate(user=user)
         # 테스트용 이미지 파일의 경로
         path = os.path.join(settings.STATIC_DIR, 'test', 'pby63.jpg')
-        print(path)
 
         # path에 해당하는 파일을 post요청에 'photo'키의 값으로 전달
         with open(path, 'rb') as photo:
@@ -118,6 +120,29 @@ class PostListViewTest(APILiveServerTestCase):
 
         # response 코드가 201인지 확인
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
         # 1개의 포스트가 생성되었는지 확인
         self.assertEqual(Post.objects.count(), 1)
+
+        # 업로드를 시도한 파일 (path경로의 파일)과
+        # 실제 업로드 된 파일 (새로 생성된 Post의 photo필드에 있는 파일)이
+        # 같은 파일인지 확인
+        post = Post.objects.get(pk=response.data['pk'])
+
+        if settings.STATICFILES_STORAGE == 'django.contrib.staticfiles.storage.StaticStorage':
+            # 파일시스템에서의 두 파일을 비교할 경우
+            self.assertTrue(filecmp.cmp(path, post.photo.file.name))
+            # 실제 파일 지우기
+            post.photo.delete()
+        else:
+            # S3에 올라간 파일을 비교해야하는 경우
+            url = post.photo.url
+            # requests를 사용해서 S3파일 URL에 GET요청
+            response = requests.get(url)
+            # NamedTemporaryFile객체를 temp_file이라는 파일변수로 open
+            with NamedTemporaryFile(suffix='.jpg', delete=False) as temp_file:
+                # temp_file에 response의 내용을 기록
+                temp_file.write(response.content)
+            # 기록한 temp_file과 원본 path를 비교
+            self.assertTrue(filecmp.cmp(path, temp_file.name))
+
+
