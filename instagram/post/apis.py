@@ -2,29 +2,23 @@
 # 근데 APIView를 상속받도록
 # Serializer도 생성 (serializers.py)
 # get요청만 응답
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import mixins, generics
 
 from .models import Post
 from .serializers import PostSerializer
 
 
-class PostList(APIView):
-    # api/post/
-    def get(self, request):
-        posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
+class PostList(mixins.ListModelMixin,
+               mixins.CreateModelMixin,
+               generics.GenericAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
-    def post(self, request):
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
-
-# PostDetail APIView생성
-# APIView를 사용
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
