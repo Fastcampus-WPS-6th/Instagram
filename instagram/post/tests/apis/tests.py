@@ -31,6 +31,11 @@ class PostListViewTest(APILiveServerTestCase):
         self.assertEqual(url, self.URL_API_POST_LIST)
 
     def test_post_list_url_resolve_view_class(self):
+        """
+        post.apis.PostList뷰에 대해
+        URL reverse, resolve, 사용하고 있는 view함수가 같은지 확인
+        :return:
+        """
         # /api/post/에 매칭되는 ResolverMatch객체를 가져옴
         resolver_match = resolve(self.URL_API_POST_LIST)
         # ResolverMatch의 url_name이 'api-post'(self.URL_API_POST_LIST_NAME)인지 확인
@@ -43,6 +48,11 @@ class PostListViewTest(APILiveServerTestCase):
             self.VIEW_CLASS)
 
     def test_get_post_list(self):
+        """
+        PostList의 GET요청 (Post목록)에 대한 테스트
+        임의의 개수만큼 Post를 생성하고 해당 개수만큼 Response가 돌아오는지 확인
+        :return:
+        """
         user = self.create_user()
         # 0이상 20이하의 임의의 숫자 지정
         num = randint(1, 20)
