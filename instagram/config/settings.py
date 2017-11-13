@@ -63,6 +63,14 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'member.User'
 LOGIN_URL = 'member:login'
 
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
 # Application definition
 
 INSTALLED_APPS = [

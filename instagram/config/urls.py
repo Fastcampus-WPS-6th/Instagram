@@ -18,7 +18,8 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from member.apis import Login
+from member.apis import Login, Signup
+from post.apis import PostList
 from . import views
 
 # url모듈을 분리
@@ -28,14 +29,11 @@ from . import views
 #      각 애플리케이션의 urls모듈을 패키지화
 #        기존 urls모듈에 있던 내용은 urls/views.py로 이동
 #        apis에 있는 내용들은 urls/apis.py에 작성
-
 # 이 urls모듈을 패키지화시키고
 #   기존 URL은 urls/views.py
 #   API의 URL은 urls/apis.py
 #       각 파일에 urlpatterns를 정의하고
 #   urls/__init__.py에서 맨 위 설명과 같은 방식이 되도록 각 모듈을 include처리
-
-from post.apis import PostList
 
 urlpatterns = [
     # Django admin
@@ -47,6 +45,7 @@ urlpatterns = [
 
     url(r'^api/post/$', PostList.as_view(), name='api-post'),
     url(r'^api/member/login/$', Login.as_view(), name='api-login'),
+    url(r'^api/member/signup/$', Signup.as_view(), name='api-signup'),
 ]
 urlpatterns += static(
     settings.MEDIA_URL,
