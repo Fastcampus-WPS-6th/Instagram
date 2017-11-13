@@ -18,6 +18,7 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
+from member.apis import Login
 from . import views
 
 # url모듈을 분리
@@ -45,6 +46,7 @@ urlpatterns = [
     url(r'^member/', include('member.urls', namespace='member')),
 
     url(r'^api/post/$', PostList.as_view(), name='api-post'),
+    url(r'^api/member/login/$', Login.as_view(), name='api-login'),
 ]
 urlpatterns += static(
     settings.MEDIA_URL,
