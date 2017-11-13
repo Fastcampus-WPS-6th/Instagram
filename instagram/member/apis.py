@@ -4,6 +4,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .serializers import UserSerializer
+
 
 class Login(APIView):
     def post(self, request, *args, **kwargs):
@@ -18,12 +20,7 @@ class Login(APIView):
             token, token_created = Token.objects.get_or_create(user=user)
             data = {
                 'token': token.key,
-                'user': {
-                    'pk': user.pk,
-                    'username': user.username,
-                    'img_profile': user.img_profile.url if user.img_profile else '',
-                    'age': user.age,
-                }
+                'user': UserSerializer(user).data
             }
             return Response(data, status=status.HTTP_200_OK)
         data = {
