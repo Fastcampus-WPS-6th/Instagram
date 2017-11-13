@@ -7,7 +7,7 @@ from django.contrib.auth import (
     get_user_model,
     login as django_login,
     logout as django_logout,
-)
+    authenticate)
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
@@ -161,17 +161,15 @@ def facebook_login(request):
     #   fb_<facebook_user_id>
     username = f'fb_{user_info.id}'
     # 위 username에 해당하는 User가 있는지 검사
-    if User.objects.filter(username=username).exists():
-        # 있으면 user에 해당 유저를 할당
-        user = User.objects.get(username=username)
-    else:
+    if not User.objects.filter(username=username).exists():
         # 없으면 user에 새로 만든 User를 할당
-        user = User.objects.create_user(
+        User.objects.create_user(
             user_type=User.USER_TYPE_FACEBOOK,
             username=username,
             age=0
         )
     # user를 로그인시키고 post_list페이지로 이동
+    user = authenticate(facebook_user_id=user_info.id)
     django_login(request, user)
     return redirect('post:post_list')
 

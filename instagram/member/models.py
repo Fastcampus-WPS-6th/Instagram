@@ -9,6 +9,10 @@ class UserManager(DjangoUserManager):
     def create_superuser(self, *args, **kwargs):
         return super().create_superuser(age=30, *args, **kwargs)
 
+    def create_facebook_user(self, facebook_user_id):
+        # Facebook type의 유저를 생성
+        pass
+
 
 class User(AbstractUser):
     USER_TYPE_FACEBOOK = 'f'
