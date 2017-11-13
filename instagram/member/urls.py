@@ -8,4 +8,7 @@ urlpatterns = [
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^facebook-login/$', views.facebook_login, name='facebook_login'),
+    url(r'^front-facebook-login/$',
+        views.FrontFacebookLogin.as_view(),
+        name='front-facebook-login'),
 ]

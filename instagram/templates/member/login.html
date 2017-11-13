@@ -4,12 +4,18 @@
 {% block content %}
 <div class="login-container">
 	{% include 'include/form-horizontal.html' with form=login_form submit_text='로그인' %}
-	<div>{{ scope|join:',' }}</div>
 	<a
 		href="https://www.facebook.com/v2.10/dialog/oauth?
 					client_id={{ facebook_app_id }}&
 					scope={{ scope|join:',' }}&
 					redirect_uri={{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'member:facebook_login' %}"
     class="btn btn-info btn-block">페이스북 로그인</a>
+
+	<a
+		href="https://www.facebook.com/v2.10/dialog/oauth?
+					client_id={{ facebook_app_id }}&
+					scope={{ scope|join:',' }}&
+					redirect_uri={{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'member:front-facebook-login' %}"
+    class="btn btn-info btn-block">프론트 페이스북 로그인</a>
 </div>
 {% endblock %}
