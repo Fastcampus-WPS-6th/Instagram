@@ -40,12 +40,7 @@ class Signup(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# views.py에
-# class FrontFacebookLogin(View):
-# URL: /member/front-facebook-login/
-
-# Facebook쪽 앱 설정에서 리다이렉트 URI에 위 URL을 추가
-
-# facebook_login()뷰가 하던 일을 대부분 동일하게 하며, 마지막 결과로
-# JsonResponse로 {'access_token': <액세스 토큰값>, 'facebook_user_id': <해당유저의 app에 대한 페이스북 ID(고유값)}
-# 을 리턴하도록 함
+class FacebookLogin(APIView):
+    # /api/member/facebook-login/
+    def post(self, request):
+        print(request.data)
