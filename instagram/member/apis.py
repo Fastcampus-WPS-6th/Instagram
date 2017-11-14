@@ -3,7 +3,7 @@ from typing import NamedTuple
 import requests
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -36,7 +36,12 @@ class Login(APIView):
         return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class Signup(APIView):
+class Signup(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = SignupSerializer
+
+
+class SignupAPIView(APIView):
     def post(self, request):
         serializer = SignupSerializer(data=request.data)
         if serializer.is_valid():

@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 class SignupSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
-    token = serializers.SerializerMethodField()
+    # token = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -42,10 +42,10 @@ class SignupSerializer(serializers.ModelSerializer):
         return User.objects.create_user(
             username=validated_data['username'],
             password=validated_data['password1'],
-            img_profile=validated_data['img_profile'],
+            img_profile=validated_data.get('img_profile'),
             age=validated_data['age'],
         )
 
-    @staticmethod
-    def get_token(obj):
-        return Token.objects.create(user=obj).key
+    # @staticmethod
+    # def get_token(obj):
+    #     return Token.objects.create(user=obj).key
