@@ -6,7 +6,7 @@ from . import apis, views
 
 urlpatterns = [
     url(r'^', include(views)),
-    url(r'^api/', include(apis)),
+    url(r'^api/', include(apis, namespace='api')),
 ]
 urlpatterns += static(
     settings.MEDIA_URL,
