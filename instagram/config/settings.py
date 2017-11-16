@@ -69,7 +69,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '.elasticbeanstalk.com',
-    '.pikachu.kr',
+    'api.pikachu.kr',
     '.lhy.kr',
 ]
 
