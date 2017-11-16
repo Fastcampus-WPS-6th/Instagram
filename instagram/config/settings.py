@@ -121,6 +121,8 @@ MIDDLEWARE = [
 ]
 CORS_ORIGIN_WHITELIST = (
     'localhost:3001',
+    'front.localhost:8013',
+    'pikachu.kr',
 )
 
 ROOT_URLCONF = 'config.urls'
