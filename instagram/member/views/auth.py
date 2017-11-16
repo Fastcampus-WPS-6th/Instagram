@@ -3,6 +3,7 @@ from django.contrib.auth import (
     login as django_login,
     logout as django_logout,
 )
+from django.contrib.auth.backends import ModelBackend
 from django.shortcuts import redirect, render
 
 from ..forms import LoginForm, SignupForm
@@ -50,7 +51,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             # 회원가입이 완료된 후 해당 유저를 login시킴
-            django_login(request, user)
+            django_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('post:post_list')
 
     # GET요청시 SignupForm인스턴스를 form변수에 할당, context에 같은 키/값으로 전달
