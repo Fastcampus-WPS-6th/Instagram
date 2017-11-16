@@ -19,12 +19,20 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 # instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 
-# instagram_project/instagram/media/
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA폴더
+#   instagram_project/.media/
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 MEDIA_URL = '/media/'
-# instagram_project/instagram/static/
+
+# Static Root폴더
+#   instagram_project/.static_root/
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+
+# Static폴더
+#    instagram_project/instagram/static/
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
 # STATIC_URL로의 요청은 STATICFILES_DIRS경로의 목록에서 파일을 찾아 리턴
 STATICFILES_DIRS = [
     STATIC_DIR,
