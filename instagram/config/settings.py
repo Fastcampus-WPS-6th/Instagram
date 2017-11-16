@@ -66,7 +66,12 @@ FACEBOOK_SCOPE = [
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '.elasticbeanstalk.com',
+    '.pikachu.kr',
+    '.lhy.kr',
+]
 
 AUTH_USER_MODEL = 'member.User'
 LOGIN_URL = 'member:login'
