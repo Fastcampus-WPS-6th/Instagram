@@ -63,6 +63,11 @@ FACEBOOK_SCOPE = [
     'email',
 ]
 
+# CoolSMS
+COOLSMS_API_KEY = config_secret_common['coolsms']['api_key']
+COOLSMS_API_SECRET = config_secret_common['coolsms']['api_secret']
+COOLSMS_SENDER = config_secret_common['coolsms']['sender']
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

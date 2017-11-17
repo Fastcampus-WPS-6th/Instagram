@@ -11,5 +11,5 @@ class SMSSerializer(serializers.Serializer):
         validators=[sms_length]
     )
 
-    # def validate_receiver(self, value):
-    #     return value.replace('-', '')
+    def validate_receiver(self, value):
+        return value.replace('-', '')
