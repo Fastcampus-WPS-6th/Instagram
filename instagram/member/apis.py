@@ -1,3 +1,4 @@
+from pprint import pprint
 from typing import NamedTuple
 
 import requests
@@ -64,7 +65,6 @@ class FacebookLogin(APIView):
             application: str
             expires_at: int
             is_valid: bool
-            issued_at: int
             scopes: list
             type: str
             user_id: str
@@ -81,6 +81,7 @@ class FacebookLogin(APIView):
                 'access_token': app_access_token,
             }
             response = requests.get(url_debug_token, params_debug_token)
+            pprint(response.json())
             return DebugTokenInfo(**response.json()['data'])
 
         # request.data로 전달된 access_token값을 페이스북API쪽에 debug요청, 결과를 받아옴
@@ -99,6 +100,7 @@ class FacebookLogin(APIView):
             user = User.objects.create_user(
                 username=f'fb_{request.data["facebook_user_id"]}',
                 user_type=User.USER_TYPE_FACEBOOK,
+                age=0,
             )
         # 유저 시리얼라이즈 결과를 Response
         # token도 추가
