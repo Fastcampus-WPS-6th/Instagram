@@ -1,0 +1,8 @@
+celery<4.2
+Django<1.12
+django-cors-headers<2.2
+djangorestframework<3.8
+Pillow<4.4
+psycopg2<2.8
+pytz<2017.4
+requests<2.10
