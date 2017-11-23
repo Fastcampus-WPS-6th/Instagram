@@ -1,13 +1,14 @@
 language: python
-
 python:
-  - 3.6
-
+- 3.6
+before_install:
+- openssl aes-256-cbc -K $encrypted_641df6d921e5_key -iv $encrypted_641df6d921e5_iv
+  -in secrets.tar.enc -out secrets.tar -d
+- tar xvf secrets.tar
 install:
-  - pip install -r requirements.txt
-
+- pip install -r requirements.txt
 before_script:
-  - cd instagram
-
+- cd instagram
 script:
-  - python manage.py test
+- python manage.py test
+
