@@ -10,6 +10,7 @@ from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.urls import reverse, resolve
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APILiveServerTestCase
 
 from post.apis import PostList
@@ -112,6 +113,9 @@ class PostListViewTest(APILiveServerTestCase):
         user = self.create_user()
         # 해당 유저를 현재 client에 강제로 인증
         self.client.force_authenticate(user=user)
+        # token = Token.objects.get_or_create(user=user)[0]
+        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
         # 테스트용 이미지 파일의 경로
         path = os.path.join(settings.STATIC_DIR, 'test', 'pby63.jpg')
 
@@ -131,7 +135,7 @@ class PostListViewTest(APILiveServerTestCase):
         # 같은 파일인지 확인
         post = Post.objects.get(pk=response.data['pk'])
 
-        if settings.STATICFILES_STORAGE == 'django.contrib.staticfiles.storage.StaticStorage':
+        if settings.STATICFILES_STORAGE == 'django.contrib.staticfiles.storage.StaticFilesStorage':
             # 파일시스템에서의 두 파일을 비교할 경우
             self.assertTrue(filecmp.cmp(path, post.photo.file.name))
             # 실제 파일 지우기
@@ -147,5 +151,3 @@ class PostListViewTest(APILiveServerTestCase):
                 temp_file.write(response.content)
             # 기록한 temp_file과 원본 path를 비교
             self.assertTrue(filecmp.cmp(path, temp_file.name))
-
-
