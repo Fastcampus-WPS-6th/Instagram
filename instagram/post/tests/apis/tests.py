@@ -43,9 +43,10 @@ class PostListViewTest(APILiveServerTestCase):
         """
         # /api/post/에 매칭되는 ResolverMatch객체를 가져옴
         resolver_match = resolve(self.URL_API_POST_LIST)
-        # ResolverMatch의 url_name이 'api-post'(self.URL_API_POST_LIST_NAME)인지 확인
+        # ResolverMatch의 view_name(namespace와 url_name을 합친 결과)
+        # 이 'api-post'(self.URL_API_POST_LIST_NAME)인지 확인
         self.assertEqual(
-            resolver_match.url_name,
+            resolver_match.view_name,
             self.URL_API_POST_LIST_NAME)
         # ResolverMatch의 func이 PostList(self.VIEW_CLASS)인지 확인
         self.assertEqual(
