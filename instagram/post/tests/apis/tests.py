@@ -102,7 +102,7 @@ class PostListViewTest(APILiveServerTestCase):
 
         response = self.client.get(self.URL_API_POST_LIST)
         # author가 없는 Post개수는 response에 포함되지 않는지 확인
-        self.assertEqual(len(response.data), num_posts)
+        self.assertEqual(response.data['count'], num_posts)
 
     def test_create_post(self):
         """
